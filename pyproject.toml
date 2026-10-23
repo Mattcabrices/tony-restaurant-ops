@@ -1,0 +1,11 @@
+[project]
+name = "tony-restaurant-ops"
+version = "0.1.0"
+description = "Synthetic restaurant operations intelligence portfolio demo"
+requires-python = ">=3.14,<3.15"
+readme = "README.md"
+license = "MIT"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
