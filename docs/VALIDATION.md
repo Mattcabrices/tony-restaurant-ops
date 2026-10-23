@@ -11,6 +11,10 @@ Validated locally on Windows x64 with Python 3.14.7 on October 23, 2026:
 
 The public snapshot was assembled from an explicit source/document allowlist. No existing production Git history, databases, logs, account IDs, private serving-build overrides or source exports are included. A new repository history is used.
 
-CI is configured for Windows and Linux with Python 3.14.7 and a hashed dependency lock. Remote workflow outcomes must be checked on GitHub; configuration is not a passing result. No clean-machine installation or real credentialed vendor read was performed for this public demo. The optional monday.com checker passed mocked tests; live activation remains token-dependent.
+Remote CI subsequently passed on both Windows and Linux using Python 3.14.7, a fresh hashed dependency installation, dependency consistency checks, all 21 tests, the public-tree guard, the public dependency vulnerability check and JavaScript syntax validation. [Verified CI run](https://github.com/Mattcabrices/tony-restaurant-ops/actions/runs/40007115981) and [screenshot-inclusive CI run](https://github.com/Mattcabrices/tony-restaurant-ops/actions/runs/40007443674).
+
+The first workflow attempt caught a YAML quoting error before job execution; it was corrected and the passing runs above validate the fix. A fresh clone of the published repository also passed all 21 local tests and the source guard. Every Git-history blob was checked against known live credential values with zero matches.
+
+No real credentialed vendor read was performed for this public demo. The optional monday.com checker passed mocked tests; live activation remains token-dependent. These public hosted-runner checks do not establish production Windows isolation, private account access, or real forecasting accuracy.
 
 Forecast/backtest scores are computed from a deliberately fabricated 120-day series. They are not a measured accuracy claim for any real restaurant.
