@@ -6,6 +6,8 @@ A runnable, privacy-safe portfolio edition of a custom restaurant operations ass
 
 Built by **Matt** · [GitHub profile](https://github.com/Mattcabrices) · Python · FastAPI · SQLite · automated tests
 
+![Local dashboard with invented sample data](docs/demo.png)
+
 ## Why I built it
 
 Restaurant work spans point-of-sale reports, delivery channels, menu quantities, team tasks, events, and incomplete accounting inputs. A helpful assistant has to answer more than “what were sales?” It has to explain **which source, which date, which units, and what is missing**.
