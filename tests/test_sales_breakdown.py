@@ -2,6 +2,7 @@ from copy import deepcopy
 from datetime import date, datetime
 import json
 import pytest
+pytest.importorskip('msal', reason='Operational Windows dependencies required.')
 
 from app.calculations import ET
 from app.providers import ProviderError

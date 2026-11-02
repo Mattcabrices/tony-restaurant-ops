@@ -1,5 +1,6 @@
 import json
 import pytest
+pytest.importorskip('msal', reason='Operational Windows dependencies required.')
 
 from app.context_policy import recent_conversation, wants_history
 from app.operations import Operations
