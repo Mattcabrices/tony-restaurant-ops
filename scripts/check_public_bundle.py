@@ -19,6 +19,8 @@ def check(files):
     problems=[]
     for name,data in files:
         path=Path(name)
+        if name.replace('\\','/').split('/')[0] in {'data','Tonys-Corner','imports','exports','output','tmp'} or name.replace('\\','/') in {'app/toast_pizza_mapping.json','app/football_calendar.json'}:
+            problems.append(name+': operational state or owner catalog')
         if path.suffix.lower() in FORBIDDEN_SUFFIXES or (path.name.startswith('.env') and path.name!='.env.example'):
             problems.append(name+': private/generated file type')
         text=data.decode('utf-8',errors='replace')
