@@ -1,5 +1,15 @@
 # Validation record
 
+## November 2, 2026 documentation update
+
+The public README and release notes now describe the private lookup reliability
+release while explicitly distinguishing it from the synthetic demo. All **21
+public tests passed** locally, and the public-tree guard passed. No runtime code,
+dependencies or fixtures changed. The earlier hosted CI runs below apply to
+their respective commits; a new remote CI result is not yet claimed here.
+
+## Original public demo validation
+
 Validated locally on Windows x64 with Python 3.14.7 on October 23, 2026:
 
 - **21 tests passed** for this public edition.
