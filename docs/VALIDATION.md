@@ -2,13 +2,14 @@
 
 ## Open-source operational alpha — November 2, 2026
 
-- 159 public tests passed locally on Windows/Python 3.14.7, using synthetic state.
+- 165 public tests passed locally on Windows/Python 3.14.7, using synthetic state.
 - Full application source parses, dashboard JavaScript syntax passes, and the public-tree guard passes.
 - Source scanning found no known private menu/account identifiers or curated original restaurant context.
 - Generic coaching PDF rendered with existing optional dependencies; fictional labels appeared on all pages. No package was installed.
-- Native Windows AppContainer: all 159 tests and five denial probes passed (private decoy read, outside write, internet, loopback and child process). Source fingerprint: `4030f12fbb6b0c9f732187a1daef93cdc6d483abf2d3bcae1fd7f29954eb8d9b`. No production vault exists in this public checkout; that private-vault probe was not claimed for this edition.
+- Native Windows AppContainer: all 165 tests and five denial probes passed (private decoy read, outside write, internet, loopback and child process). Source fingerprint: `76ba4a9ddd17aef5b2e7c8c1ae2bf1d5b377958c03c6e51013c364ce4c83c63d`. No production vault exists in this public checkout; that private-vault probe was not claimed for this edition.
 - No real vendor credentials, mailboxes, Telegram recipients or production data were used for public-edition testing.
-- Fresh Windows VM installation and new remote CI are not yet established for this alpha. Earlier private deployment counts are not this public edition's validation.
+- Fresh Windows VM installation remains untested. The initial operational CI passed on Windows and Linux ([run](https://github.com/Mattcabrices/tony-restaurant-ops/actions/runs/41538788305)); subsequent source changes require their own checks. Earlier private deployment counts are not this public edition's validation.
+- Synthetic channel-window tests cover dine-in, in-store takeout, explicitly configured online takeout using API order source, refunds, duplicates, unknown classifications, missing timestamps, pagination limits and natural-language tool execution. Recall tests enforce channel separation and exclusion of private guest/coaching archives.
 
 ## November 2, 2026 documentation update
 

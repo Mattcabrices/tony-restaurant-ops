@@ -1,6 +1,8 @@
 # Release notes
 
-## November 2, 2026 — 0.2.0 alpha open-source runtime
+## November 2, 2026 â€” 0.2.0 alpha open-source runtime
+
+Added bounded Toast time-window sales by dining option/order source and AI-callable ordinary conversation recall. Unknown channels remain explicit; private guest/coaching archives stay out of model context.
 
 The reusable Windows operational source is now distributed in app/, alongside
 the original portable example. Includes Toast/Clover/Telegram/monday/Sheets and
