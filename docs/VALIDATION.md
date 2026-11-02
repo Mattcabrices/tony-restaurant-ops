@@ -1,5 +1,15 @@
 # Validation record
 
+## Open-source operational alpha — November 2, 2026
+
+- 159 public tests passed locally on Windows/Python 3.14.7, using synthetic state.
+- Full application source parses, dashboard JavaScript syntax passes, and the public-tree guard passes.
+- Source scanning found no known private menu/account identifiers or curated original restaurant context.
+- Generic coaching PDF rendered with existing optional dependencies; fictional labels appeared on all pages. No package was installed.
+- Native Windows AppContainer: all 159 tests and five denial probes passed (private decoy read, outside write, internet, loopback and child process). Source fingerprint: `4030f12fbb6b0c9f732187a1daef93cdc6d483abf2d3bcae1fd7f29954eb8d9b`. No production vault exists in this public checkout; that private-vault probe was not claimed for this edition.
+- No real vendor credentials, mailboxes, Telegram recipients or production data were used for public-edition testing.
+- Fresh Windows VM installation and new remote CI are not yet established for this alpha. Earlier private deployment counts are not this public edition's validation.
+
 ## November 2, 2026 documentation update
 
 The public README and release notes now describe the private lookup reliability

@@ -1,5 +1,13 @@
 # Release notes
 
+## November 2, 2026 — 0.2.0 alpha open-source runtime
+
+The reusable Windows operational source is now distributed in app/, alongside
+the original portable example. Includes Toast/Clover/Telegram/monday/Sheets and
+Outlook read adapters, R365 provider interfaces, research, approvals, memory and
+coaching workflows. Account access, private catalogs and employer forms are not
+included. See README and SELF-HOSTING.md for supported scope and setup.
+
 ## November 2, 2026 â€” private lookup reliability release
 
 This public update documents the latest private application deployment. It does

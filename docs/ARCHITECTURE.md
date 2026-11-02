@@ -1,5 +1,10 @@
 # Architecture and scope
 
+The operational runtime is now available in `app/`. See [self-hosting](SELF-HOSTING.md)
+and the README for its current capabilities and boundaries. The original example
+description below applies to `tony_demo/`. Direct Google Calendar and live R365
+remain pending; other adapters need each operator's own authorization.
+
 The private application is a restaurant-specific local operations engine. This repository extracts a small, independently runnable subset, rather than attempting to copy its state or replace its security-sensitive deployment.
 
 Reporting and forecast routines were selected from existing modules. Private restaurant overrides, identities, schedules, source mappings, and business history were omitted. The exception ledger was extracted with a synthetic-only SQLite store. The dashboard, fixture generator, CLI, public contracts and isolated monday.com checker are portfolio presentation components.

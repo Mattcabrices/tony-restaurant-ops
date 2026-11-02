@@ -1,5 +1,10 @@
 # Integration setup and honest status
 
+The operational runtime is now available in `app/`. See [self-hosting](SELF-HOSTING.md)
+and the README for its current capabilities and boundaries. The original example
+description below applies to `tony_demo/`. Direct Google Calendar and live R365
+remain pending; other adapters need each operator's own authorization.
+
 The default demo is offline. Toast, Clover, Restaurant365, Outlook and Google Calendar names in the README describe an integration roadmap and explicitly labeled private implementation context, not ready-to-use public adapters. `contracts.py` demonstrates the shared observation schema; `pending()` returns `None` with `not_connected`, never a fictional zero.
 
 ## Optional monday.com checker
@@ -20,7 +25,7 @@ python -m tony_demo.integrations.monday --board https://example.monday.com/board
 
 The URL above is an illustrative placeholder. The checker returns at most 25 items and reports partial results. There is no automatic polling, scheduler, mutation, file download, update parsing, token storage, or board modification.
 
-The version is explicitly pinned to `2026-07`, a supported stable version documented at implementation time. Review provider versioning before its retirement. [Official request guide](https://developer.monday.com/api-reference/docs/getting-started) · [Versioning](https://developer.monday.com/api-reference/docs/api-versioning) · [Authentication](https://developer.monday.com/api-reference/docs/authentication).
+The version is explicitly pinned to `2026-07`, a supported stable version documented at implementation time. Review provider versioning before its retirement. [Official request guide](https://developer.monday.com/api-reference/docs/getting-started) Â· [Versioning](https://developer.monday.com/api-reference/docs/api-versioning) Â· [Authentication](https://developer.monday.com/api-reference/docs/authentication).
 
 ## Google Calendar versus Google Sheets
 
