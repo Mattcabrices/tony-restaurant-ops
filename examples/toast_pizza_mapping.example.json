@@ -1,0 +1,7 @@
+{
+  "version": "owner-reviewed-v1",
+  "definition": "Owner-verified top-level whole pizzas; no slices, calzones or packages",
+  "verified_at": "REPLACE_WITH_REVIEW_DATE",
+  "items": {"REPLACE_WITH_TOAST_ITEM_GUID": {"name": "Your whole pizza item", "size": "Lrg"}},
+  "groups": {"REPLACE_WITH_TOAST_GROUP_GUID": "Lrg"}
+}

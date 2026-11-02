@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#192c28"><title>the restaurant · Operations</title><link rel="stylesheet" href="/static/style.css"><script src="/static/app.js" defer></script></head>
+<body>
+<div id="login" class="login-screen" hidden>
+  <div class="login-art"><div class="brand-mark">t.</div><span class="eyebrow">RESTAURANT OPERATIONS</span><h1>A clear view.<br>A better shift.</h1><p>Your restaurant's daily rhythm, in one place.</p><div class="login-bottom">LOCAL OPERATIONS <span>EST. FOR THE TEAM</span></div></div>
+  <form id="login-form" class="login-form"><span class="eyebrow">YOUR OPERATIONS DESK</span><h2>Welcome to the restaurant.</h2><p id="login-description">Sign in to your private operations assistant.</p><label id="setup-label" hidden>First-run setup code<input id="setup-code" autocomplete="off" placeholder="Shown in the launch terminal"></label><label>Dashboard password<input id="password" type="password" autocomplete="current-password" required></label><button class="primary" type="submit">Open operations desk <span>↗</span></button><p class="error" id="login-error" role="alert"></p><small>Business data stays on this computer. Connect ChatGPT and Toast after signing in.</small></form>
+</div>
+<div id="shell" hidden>
+  <aside class="sidebar"><a class="brand" href="#overview"><b>t.</b><span>the restaurant<small>OPERATIONS</small></span></a><span class="nav-label">YOUR WORKSPACE</span><nav aria-label="Main navigation"><a href="#overview" data-page="overview"><span>▦</span>Overview</a><a href="#exceptions" data-page="exceptions"><span>!</span>Exceptions</a><a href="#shift" data-page="shift"><span>▣</span>Shift Desk</a><a href="#chat" data-page="chat"><span>✦</span>Ask your agent</a><a href="#briefings" data-page="briefings"><span>☷</span>Daily briefings</a><a href="#memory" data-page="memory"><span>◇</span>Memory & tasks</a><a href="#corner" data-page="corner"><span>◈</span>Tony’s Corner</a><a href="#integrations" data-page="integrations"><span>⊞</span>Integrations</a></nav><div class="sidebar-bottom"><div class="local-status"><i></i><span>Hosted on your computer<small>America / New York</small></span></div><a href="#settings">⚙ &nbsp; Settings & diagnostics</a><button id="logout" class="quiet">↪ &nbsp; Sign out</button></div></aside>
+  <div class="workspace"><header class="topbar"><span>your restaurant <b>/</b> <span id="page-label">Overview</span></span><div><span id="mode-pill" class="pill">Loading</span><span class="avatar">GM</span></div></header><main id="main" tabindex="-1"></main><footer>RESTAURANT OPERATIONS <span>Read-only business connections · Locally hosted</span></footer></div>
+</div>
+<div id="toast" class="notification" role="status" hidden></div>
+</body></html>
