@@ -57,6 +57,15 @@ The fixed example contains four invented orders: **$216 sample net sales, five w
 
 Telegram delivery, production authentication, encrypted credentials, Windows isolation, and patch approvals remain private deployment components. This demo does not implement them and must not be used to replace that deployment.
 
+### Latest private deployment — November 2, 2026
+
+The private application now supports a unified historical aggregate lookup,
+persistent booking references with up to a year of future query dates, bounded
+source recovery, and additional conversation regression checks. Source coverage,
+freshness and metric definitions remain explicit. These features are documented
+in the [release notes](docs/RELEASES.md); their production implementation and
+private data are **not included in this public demo**.
+
 ## Architecture
 
 ```mermaid
