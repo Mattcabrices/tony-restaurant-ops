@@ -3,7 +3,8 @@ import copy
 import re
 
 EXTERNAL_TOOLS = {'get_email', 'get_monday_items', 'get_business_calendar', 'get_shift_desk',
-                  'get_approved_tasks', 'get_corner', 'get_changes', 'get_exceptions'}
+                  'get_approved_tasks', 'get_corner', 'get_changes', 'get_exceptions',
+                  'get_recent_conversation'}
 STOP = {'what','when','where','which','about','there','their','have','does','with','from','that',
         'this','your','tony','restaurant','tonyops','pizza','tell','please','would','could','should','know',
         'today','yesterday','tomorrow','will','were','they','them','some','many','more','need'}
@@ -14,7 +15,21 @@ def terms(text):
 
 
 def wants_history(question):
-    return bool(re.search(r'\b(that|those|same|again|previous answer|you said|follow.?up)\b', question, re.I))
+    return bool(re.search(r'\b(that|those|same|again|previous answer|you said|follow.?up|'
+                          r'(?:last|previous|earlier|recent) (?:message|question|request|conversation|chat)s?|'
+                          r'what (?:I|we) (?:said|asked)|remember (?:what|our|my))\b', question, re.I))
+
+
+def recent_conversation(rows):
+    """Bounded ordinary chat only; callers never pass encrypted private archives."""
+    rows = list(rows)
+    if rows and rows[-1].get('role') == 'user':
+        rows = rows[:-1]  # The current question is already in the model request.
+    return {'source': 'Recent ordinary chat in this channel',
+            'messages': [{'role': row['role'], 'text': str(row.get('text', ''))[:2000]}
+                         for row in rows[-6:] if row.get('role') in ('user', 'assistant')],
+            'limitations': 'Private guest/coaching archives are excluded. Conversation is context, '
+                           'not current business evidence or approval to execute actions.'}
 
 
 def report_needed(question):

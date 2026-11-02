@@ -66,7 +66,8 @@ class Toast:
 
     async def get(self, path, params=None, ttl=0):
         single_order=bool(re.fullmatch(r'/orders/v2/orders/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',path))
-        if not single_order and not path.startswith(('/orders/v2/ordersBulk', '/labor/v1/', '/stock/v1/inventory', '/restaurants/v1/restaurants/', '/menus/v2/menus')):
+        dining_option=bool(re.fullmatch(r'/config/v2/diningOptions/[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}',path))
+        if not single_order and not dining_option and not path.startswith(('/orders/v2/ordersBulk', '/labor/v1/', '/stock/v1/inventory', '/restaurants/v1/restaurants/', '/menus/v2/menus')):
             raise ProviderError('Endpoint is outside the read-only allowlist.')
         key = path + str(sorted((params or {}).items()))
         if key in self.cache and time.time() - self.cache[key][0] < ttl:

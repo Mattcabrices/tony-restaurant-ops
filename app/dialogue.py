@@ -5,6 +5,7 @@ import time
 from .guest_lookup import parse, natural_period, is_guest_lookup, DATE_PATTERN, WEEKDAY_PATTERN
 
 BUSINESS={
+    'get_sales_breakdown':{'date','start_hour','end_hour'},
     'get_business_lookup':{'metric','start','end','dimension'},
     'get_booked_orders':{'date'},
     'get_report':{'date'},'get_item_sales':{'query','date'},
