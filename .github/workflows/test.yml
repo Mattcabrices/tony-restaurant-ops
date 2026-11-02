@@ -16,7 +16,7 @@ jobs:
           python-version: '3.14.7'
       - run: 'python -m pip install --require-hashes --only-binary=:all: -r requirements.lock'
       - if: runner.os == 'Windows'
-        run: python -m pip install --require-hashes --only-binary=:all: -r requirements-runtime-win.lock
+        run: 'python -m pip install --require-hashes --only-binary=:all: -r requirements-runtime-win.lock'
       - run: python -m pip check
       - run: python -m pytest -q
       - run: python scripts/check_public_bundle.py
