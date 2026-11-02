@@ -22,3 +22,12 @@ test-results/
 dist/
 build/
 *.egg-info/
+
+# Self-hosted operational state: never publish
+data/
+Tonys-Corner/
+imports/
+exports/
+output/
+tmp/
+app/football_calendar.json

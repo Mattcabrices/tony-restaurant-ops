@@ -1,5 +1,18 @@
 # Security policy
 
+## Operational runtime scope
+
+The Windows runtime in `app/` is now included. It provides authenticated local
+routes, Windows-bound encrypted storage and optional credentialed adapters.
+Follow `docs/SELF-HOSTING.md`. Descriptions below of the portable synthetic demo
+apply to `tony_demo/`, not the full operational runtime.
+
+Never publish data/, Tonys-Corner/, imports, exports, private menu mappings,
+employer forms or backups. Public-source queries must not contain private
+business records. Keep the listener on loopback and use your own credentials.
+Native isolation has no unrestricted execution fallback. Never include real
+employee/guest records or credentialed logs in public issues.
+
 This is an offline-by-default synthetic demonstration, not a hardened public multi-user service. Bind the demo to `127.0.0.1`. Do not connect production data or expose it publicly without a separate authentication and deployment review.
 
 The monday.com checker runs only through an explicit CLI `--live` command. It uses one fixed read query against the official HTTPS API, disables environment proxies/redirects, bounds its returned items, and does not save tokens. Board text is untrusted. The token itself may have broader privileges; the code's read boundary does not reduce those permissions at the provider.
