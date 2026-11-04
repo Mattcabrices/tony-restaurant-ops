@@ -39,3 +39,15 @@ The first workflow attempt caught a YAML quoting error before job execution; it 
 No real credentialed vendor read was performed for this public demo. The optional monday.com checker passed mocked tests; live activation remains token-dependent. These public hosted-runner checks do not establish production Windows isolation, private account access, or real forecasting accuracy.
 
 Forecast/backtest scores are computed from a deliberately fabricated 120-day series. They are not a measured accuracy claim for any real restaurant.
+
+## November 4, 2026 — staged amount-based order lookup
+
+All 169 public tests passed in the offline Windows AppContainer with five denial
+probes. Exact source fingerprint:
+`ddbdacd36ac16c373ecb07d105a7f97589d51511e176b941cd6b5113f6cead19`.
+The isolated runner now supplies its own pytest configuration explicitly, avoiding
+configuration discovery outside the disposable source tree. No host ACL was relaxed.
+Amount search tests use invented receipt data, inclusive boundaries, split checks,
+refund distinctions, invalid/missing amounts, request/result/output caps and AI tool
+execution. Public guard passed. These changes have not yet been published or run
+in remote CI; older hosted results above apply only to their respective commits.

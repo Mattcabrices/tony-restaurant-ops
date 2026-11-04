@@ -1,5 +1,12 @@
 # Release notes
 
+## November 4, 2026 — staged order amount search
+
+Read-only Toast searches can find receipts by order total, individual check total
+or explicitly requested net sales. Projections exclude guest/contact/tab/payment
+identities; split-check totals and combined order totals remain distinct. Coverage
+and bounded-scan gaps are explicit. No new permissions, packages or schedules.
+
 ## November 2, 2026 — 0.2.0 alpha open-source runtime
 
 Added bounded Toast time-window sales by dining option/order source and AI-callable ordinary conversation recall. Unknown channels remain explicit; private guest/coaching archives stay out of model context.
