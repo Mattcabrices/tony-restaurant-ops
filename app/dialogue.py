@@ -1,10 +1,13 @@
 """Bounded RAM-only query context; no records, permissions, or durable memory."""
 import re
 import time
+import math
 
 from .guest_lookup import parse, natural_period, is_guest_lookup, DATE_PATTERN, WEEKDAY_PATTERN
 
 BUSINESS={
+    'get_operator_sales':{'metric','period','start','end','dimension','compare'},
+    'get_order_receipt':{'day','reference'},'get_operator_forecast':{'target','metric'},
     'get_orders_by_amount':{'start','end','minimum','maximum','basis'},
     'get_sales_breakdown':{'date','start_hour','end_hour'},
     'get_business_lookup':{'metric','start','end','dimension'},
@@ -90,10 +93,11 @@ class Dialogue:
 
     def remember_business(self,channel,name,args,result):
         if name not in BUSINESS or not isinstance(args,dict):return
-        if isinstance(result,dict) and (result.get('error') or result.get('available') is False):return
+        if isinstance(result,dict) and (result.get('error') or result.get('available') is False or result.get('status') in {'unavailable','busy'}):return
         clean={}
         for key,value in args.items():
             if key not in BUSINESS[name]:continue
             if isinstance(value,str) and len(value)<=200:clean[key]=value
+            elif key in {'minimum','maximum'} and type(value) in (int,float) and math.isfinite(value) and 0<=value<=10000000:clean[key]=value
             elif type(value) is int and 0<=value<=100:clean[key]=value
         self.put(channel,{'domain':'business','tool':name,'arguments':clean})

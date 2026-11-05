@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 from datetime import date, datetime, timedelta, timezone
 import httpx
 
@@ -71,7 +72,17 @@ For sales by dining option or ordering channel, especially within a time window,
 For actual sales, order counts, whole pizzas, wings/fingers portions or pieces, labor hours or channel sales over dates, prefer get_business_lookup. It selects existing local Clover/Toast data and bounded live recovery automatically. Use the configured Wednesday-Tuesday range for weeks. Source-specific covered totals are partial unless complete; never combine Clover gross and Toast net totals. Read coverage and freshness before answering. If get_report or a live source cannot serve an old date, use this lookup instead of saying historical data is unavailable. Arbitrary item names/modifiers still use their specialized tools; unsupported historical detail is a gap, not zero. For future orders use get_booked_orders; for future demand use forecasts. Pending Outlook/R365 authorization cannot be bypassed by choosing another tool.
 """
 
+SYSTEM += '''\nFor operator sales totals and comparisons, prefer get_operator_sales: it resolves business dates consistently and keeps sources separate. Today is an observed partial day, never a completed-day total. Use get_order_receipt for a receipt/order/check number with its date; amount ranges use get_orders_by_amount. No guest identity is needed for nonpersonal receipt lookup. For a new sales/demand prediction, use get_operator_forecast for the requested day/metric (evening_sales for night). It produces a separately labeled on-demand estimate with backtest error and uncertainty; get_corner remains the source for previously issued research predictions. Never substitute full-day predictions for evening sales. If unsure which basic operations are supported, read get_operator_capabilities and use the listed tools before claiming a feature is unsupported. Partial/unavailable status is a data or coverage gap, not proof that all Toast access is missing. Explain actual constraints without asking for an export when a bounded read can answer. These reads grant no code, schedule, email, purchasing or production-write authority.'''
+
 TOOLS = [
+    {'type':'function','name':'get_operator_capabilities','description':'Discover supported operator reads, business date/week, bounded query limits and pending account integrations. No credentials or external calls.',
+     'parameters':{'type':'object','properties':{},'additionalProperties':False},'strict':True},
+    {'type':'function','name':'get_operator_sales','description':'Source-separated actual sales/quantities/labor with standard business periods, explicit coverage and same-definition comparisons. Use for how are we doing this/last week, yesterday versus last week, or a custom historical range. Today is partial. Empty start/end except for custom dates.',
+     'parameters':{'type':'object','properties':{'metric':{'type':'string','enum':['sales','orders','whole_pizzas','wing_orders','wing_pieces','finger_orders','finger_pieces','labor_hours']},'period':{'type':'string','enum':['today','yesterday','this_week','last_week','last_14_days','custom']},'start':{'type':'string'},'end':{'type':'string'},'dimension':{'type':'string','enum':['','Lrg','Med','Mini','GF']},'compare':{'type':'string','enum':['none','previous_period','previous_week']}},'required':['metric','period','start','end','dimension','compare'],'additionalProperties':False},'strict':True},
+    {'type':'function','name':'get_order_receipt','description':'Read nonpersonal order/check totals using a receipt number plus business date, or an order UUID plus business date. Returns separate checks and combined total. Numbers can be ambiguous; never infer customer identity.',
+     'parameters':{'type':'object','properties':{'day':{'type':'string','description':'YYYY-MM-DD'},'reference':{'type':'string','description':'Numeric order/check receipt number or order UUID; not a guest name'}},'required':['day','reference'],'additionalProperties':False},'strict':True},
+    {'type':'function','name':'get_operator_forecast','description':'On-demand forecast from stored Toast history in the existing offline numerical jail. Returns rolling backtest MAE/WAPE/bias, empirical range, training dates, coverage gaps. No AI/search calls, data collection, external-feature uplift or schedule change. Use evening_sales for night; sales for full day. Target today through 14 days ahead.',
+     'parameters':{'type':'object','properties':{'target':{'type':'string','description':'YYYY-MM-DD'},'metric':{'type':'string','enum':['sales','evening_sales','orders','wing_orders','wing_pieces','finger_orders','finger_pieces','labor_hours']}},'required':['target','metric'],'additionalProperties':False},'strict':True},
     {'type':'function','name':'get_orders_by_amount','description':'Find current/past Toast orders by inclusive dollar range over 1–31 business dates. Returns nonpersonal receipt references, individual check totals and combined order totals. Default order_total includes tax and tip; check_total matches any individual check; net_sales uses established net-sales/refund calculation. This supports requests like find orders between $500 and $900 in the past two weeks. No customer identities.',
      'parameters':{'type':'object','properties':{'start':{'type':'string','description':'First business date YYYY-MM-DD'},'end':{'type':'string','description':'Last business date YYYY-MM-DD inclusive'},'minimum':{'type':'number','minimum':0},'maximum':{'type':'number','minimum':0},'basis':{'type':'string','enum':['order_total','check_total','net_sales']}},'required':['start','end','minimum','maximum','basis'],'additionalProperties':False},'strict':True},
     {'type':'function','name':'get_business_lookup','description':'Unified read-only actuals lookup across stored Toast aggregates, imported Clover history and bounded live Toast recovery. Use for historical/recent daily or weekly sales, order counts, whole pizzas, wings/fingers portions or pieces, recorded labor and mapped channels. Up to 93 business dates. Reports source-specific totals, freshness and missing dates. Never use for future bookings or forecasts; never combine Clover gross and Toast net sales.',
@@ -251,6 +262,8 @@ class Operations:
         self.task_worker = None
         self.shift_desk = None
         self.pending_changes = {}
+        from .operator_service import OperatorService
+        self.operator = None if os.getenv('TONY_OPERATOR_DISABLED')=='1' else OperatorService(self)
 
     def settings(self):
         return DEFAULTS | self.db.get('settings', {})
@@ -463,6 +476,18 @@ class Operations:
             metric,start,end,dimension=dimension,closeout=cfg['closeout_hour'])
 
     async def tool(self, name, args, channel):
+        if name in {t['name'] for t in TOOLS}:
+            self.db.set('ai_last_tool', {'name':name,'at':utcnow(),'channel':channel})
+        if name in {'get_operator_capabilities','get_operator_sales','get_order_receipt','get_operator_forecast'} and self.operator is None:
+            return {'status':'unavailable','reason':'Operator workspace disabled by the local rollback switch; existing tools remain available.'}
+        if name=='get_operator_capabilities': return self.operator.capabilities()
+        if name=='get_operator_sales':
+            payload={'kind':'sales',**args}
+            for key in ('start','end'):
+                if not payload.get(key):payload.pop(key,None)
+            return await self.operator.execute(payload)
+        if name=='get_order_receipt': return await self.operator.execute({'kind':'receipt',**args})
+        if name=='get_operator_forecast': return await self.operator.execute({'kind':'forecast',**args})
         if name=='get_orders_by_amount':
             if self.settings()['demo']:raise ProviderError('Order amount search requires Live Toast mode.')
             from .order_search import search_orders

@@ -242,6 +242,8 @@ def create_app(directory=None, vault=None, background=True):
 
     app = FastAPI(title="the restaurant AI Operations", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
     app.add_middleware(RequestBodyLimit)
+    from .operator_api import operator_router
+    if ops.operator is not None: app.include_router(operator_router(ops.operator))
     app.state.db, app.state.vault, app.state.ops = db, vault, ops
     app.state.ai, app.state.toast, app.state.telegram = ai, toast, telegram
     app.state.started_at = utcnow()

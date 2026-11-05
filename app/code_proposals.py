@@ -25,7 +25,9 @@ PROTECTED = {'app/code_proposals.py', 'app/telegram.py', 'app/storage.py',
              'app/guest_lookup.py', 'app/writeups.py', 'scripts/render_writeup.py', 'app/dialogue.py', 'app/intent_router.py',
              'app/conversation_plan.py','app/conversation_archive.py','app/guest_reply.py',
              'app/booked_orders.py','app/whole_pizzas.py','app/providers.py','app/restaurant_profile.py',
-             'app/booking_index.py','app/business_lookup.py','app/sales_breakdown.py','app/order_search.py'}
+             'app/booking_index.py','app/business_lookup.py','app/sales_breakdown.py','app/order_search.py',
+             'app/operator_contracts.py','app/operator_service.py','app/operator_forecast.py',
+             'app/operator_api.py','app/receipt_lookup.py'}
 MAX_FILES = 8
 MAX_DIFF = 14000
 

@@ -153,6 +153,8 @@ async def business_lookup(db, toast, corner, metric, start, end, *,dimension='',
             'covered_days':len(covered),'requested_days':len(days),
             'missing_or_unconfirmed_dates':gaps,'complete':not gaps,
             'covered_total':round(sum(r['value'] for r in known),2) if known else None,
+            'observed_total':round(sum(r['value'] if r['value'] is not None else r.get('observed_value',0) or 0 for r in rows),2)
+                if known or any(r.get('observed_value') is not None for r in rows) else None,
             'full_period_total':round(sum(r['value'] for r in known),2) if not gaps else None})
     return {'metric':metric,'dimension':dimension,'start':start,'end':end,'retrieved_at':now.isoformat(),
         'sources':sources,'live_order_page_requests':pages,'live_dates_read':live_days,

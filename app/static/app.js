@@ -62,7 +62,7 @@ async function route(){
 
  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
 
- const labels={overview:'Overview',shift:'Shift Desk',exceptions:'Exceptions',chat:'Ask your agent',briefings:'Daily briefings',memory:'Memory & tasks',corner:'Tony’s Corner',integrations:'Integrations',settings:'Settings & diagnostics'};
+ const labels={operator:'Operator workspace',overview:'Overview',shift:'Shift Desk',exceptions:'Exceptions',chat:'Ask your agent',briefings:'Daily briefings',memory:'Memory & tasks',corner:'Tony’s Corner',integrations:'Integrations',settings:'Settings & diagnostics'};
 
  $('#page-label').textContent=labels[page]||'Overview';
 
@@ -74,7 +74,7 @@ async function route(){
 
    $('#mode-pill').textContent=config.demo?'DEMO WORKSPACE':'LIVE · READ ONLY';$('#mode-pill').className='pill'+(config.demo?' demo':'');
 
-   const html=await ({overview:overview,shift:shiftPage,exceptions:exceptionsPage,chat:chatPage,briefings:briefings,memory:memory,corner:cornerPage,integrations:integrations,settings:settings}[page]||overview)();
+   const html=await ({operator:()=>window.TonyOperator.page(),overview:overview,shift:shiftPage,exceptions:exceptionsPage,chat:chatPage,briefings:briefings,memory:memory,corner:cornerPage,integrations:integrations,settings:settings}[page]||overview)();
 
    if(version!==routeVersion)return;$('#main').innerHTML=html;bind(page);
 
@@ -228,6 +228,7 @@ async function settings(){const s=await api('status'),a=s.chatgpt;return heading
 function on(id,fn){$(id)?.addEventListener('click',e=>action(e.currentTarget,fn));}
 
 async function bind(page){
+ if(page==='operator')window.TonyOperator.bind();
 
  on('#refresh',route);on('#make-briefing',async()=>{await api('briefings','POST',{});notify('Morning briefing saved.');location.hash='briefings';if(page==='briefings')await route();});
 

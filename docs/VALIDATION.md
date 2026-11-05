@@ -51,3 +51,15 @@ Amount search tests use invented receipt data, inclusive boundaries, split check
 refund distinctions, invalid/missing amounts, request/result/output caps and AI tool
 execution. Public guard passed. These changes have not yet been published or run
 in remote CI; older hosted results above apply only to their respective commits.
+
+## November 4, 2026 — staged operator workspace
+
+All 181 public regression cases passed in offline native Windows isolation with
+five denial probes. Source fingerprint:
+`03979f48c7e012a5ea3c4c5bb92e0250de148a7feb25f2cb8943f6a8e45cc77b`.
+Uses only invented test records. Public-tree guard and both dashboard JavaScript
+syntax checks passed. New source includes typed operator HTTP/chat adapters,
+receipt lookup, source-safe comparisons, explicit current-day observed totals,
+bounded metadata audit, and an on-demand forecast broker using the existing jail.
+Real restaurant validation data and private forecasts were not copied here.
+These source changes are local and have not yet been published or run in remote CI.

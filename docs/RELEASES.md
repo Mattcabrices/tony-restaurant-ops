@@ -1,5 +1,13 @@
 # Release notes
 
+## November 4, 2026 — staged operator workspace
+
+Added typed sales, receipt, amount-search, channel and forecast requests shared
+by the dashboard and AI read tools. Forecasts expose rolling error and empirical
+uncertainty; insufficient/stale data and unavailable isolation remain explicit.
+Query metadata has its own additive schema. No package or schedule changes.
+See OPERATOR-PLATFORM.md and OPERATOR-SCHEMA.sql.
+
 ## November 4, 2026 — staged order amount search
 
 Read-only Toast searches can find receipts by order total, individual check total
