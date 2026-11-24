@@ -163,7 +163,7 @@ class DB:
         self.execute('DELETE FROM messages WHERE id NOT IN (SELECT id FROM messages ORDER BY id DESC LIMIT 2000)')
 
     def history(self, channel):
-        return list(reversed(self.rows('SELECT * FROM messages WHERE channel=? ORDER BY id DESC LIMIT 40', (channel,))))
+        return list(reversed(self.rows('SELECT * FROM messages WHERE channel=? ORDER BY created DESC,id DESC LIMIT 40', (channel,))))
 
     def backup(self):
         target = self.path.parent / 'backups'

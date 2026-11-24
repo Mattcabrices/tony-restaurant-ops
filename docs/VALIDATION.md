@@ -1,5 +1,13 @@
 # Validation record
 
+## AI-first answering — November 24, 2026
+
+- 217 public tests passed in the native Windows AppContainer with synthetic records,
+  with the denial probes passing. Scripted model replies test orchestration, not live
+  model accuracy. No vendor account, real guest record or credential was used.
+- The public-tree guard and JavaScript syntax checks passed. A fresh Windows VM install
+  remains untested. Hosted CI applies only to the commits it ran on.
+
 ## Open-source operational alpha — November 2, 2026
 
 - 165 public tests passed locally on Windows/Python 3.14.7, using synthetic state.
@@ -39,3 +47,27 @@ The first workflow attempt caught a YAML quoting error before job execution; it 
 No real credentialed vendor read was performed for this public demo. The optional monday.com checker passed mocked tests; live activation remains token-dependent. These public hosted-runner checks do not establish production Windows isolation, private account access, or real forecasting accuracy.
 
 Forecast/backtest scores are computed from a deliberately fabricated 120-day series. They are not a measured accuracy claim for any real restaurant.
+
+## November 4, 2026 — staged amount-based order lookup
+
+All 169 public tests passed in the offline Windows AppContainer with five denial
+probes. Exact source fingerprint:
+`ddbdacd36ac16c373ecb07d105a7f97589d51511e176b941cd6b5113f6cead19`.
+The isolated runner now supplies its own pytest configuration explicitly, avoiding
+configuration discovery outside the disposable source tree. No host ACL was relaxed.
+Amount search tests use invented receipt data, inclusive boundaries, split checks,
+refund distinctions, invalid/missing amounts, request/result/output caps and AI tool
+execution. Public guard passed. These changes have not yet been published or run
+in remote CI; older hosted results above apply only to their respective commits.
+
+## November 4, 2026 — staged operator workspace
+
+All 181 public regression cases passed in offline native Windows isolation with
+five denial probes. Source fingerprint:
+`03979f48c7e012a5ea3c4c5bb92e0250de148a7feb25f2cb8943f6a8e45cc77b`.
+Uses only invented test records. Public-tree guard and both dashboard JavaScript
+syntax checks passed. New source includes typed operator HTTP/chat adapters,
+receipt lookup, source-safe comparisons, explicit current-day observed totals,
+bounded metadata audit, and an on-demand forecast broker using the existing jail.
+Real restaurant validation data and private forecasts were not copied here.
+These source changes are local and have not yet been published or run in remote CI.

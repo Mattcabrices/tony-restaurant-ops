@@ -1,5 +1,31 @@
 # Release notes
 
+## November 24, 2026 — AI-first answering
+
+- Ordinary chat now uses one AI tool loop; the keyword router, masked planner, dialogue
+  metadata and guest-reply modules are removed. `/guest` and `/writeup` remain local.
+- Cross-POS order search with similar names, tabs, contacts, items, amounts, rankings,
+  explicit gaps and a local settled-day cache bound to the pizza-mapping version.
+- Usage limits are reported as limits and retried by an owner question at most every
+  30 minutes; facts already retrieved survive an AI failure.
+- Guest contacts stay out of AI context by default. Outside-text tool limits are kept.
+- Local answer traces, chat readable in the local database, and recent chat as context.
+
+## November 4, 2026 — staged operator workspace
+
+Added typed sales, receipt, amount-search, channel and forecast requests shared
+by the dashboard and AI read tools. Forecasts expose rolling error and empirical
+uncertainty; insufficient/stale data and unavailable isolation remain explicit.
+Query metadata has its own additive schema. No package or schedule changes.
+See OPERATOR-PLATFORM.md and OPERATOR-SCHEMA.sql.
+
+## November 4, 2026 — staged order amount search
+
+Read-only Toast searches can find receipts by order total, individual check total
+or explicitly requested net sales. Projections exclude guest/contact/tab/payment
+identities; split-check totals and combined order totals remain distinct. Coverage
+and bounded-scan gaps are explicit. No new permissions, packages or schedules.
+
 ## November 2, 2026 — 0.2.0 alpha open-source runtime
 
 Added bounded Toast time-window sales by dining option/order source and AI-callable ordinary conversation recall. Unknown channels remain explicit; private guest/coaching archives stay out of model context.

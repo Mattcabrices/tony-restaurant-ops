@@ -166,7 +166,7 @@ def create_app(directory=None, vault=None, background=True):
     except Exception as error:
         corner, corner_error = None, type(error).__name__
         logger.warning('Corner initialization unavailable; existing operations continue.')
-    ops = Operations(db, toast, ai, outlook, football, calendar, monday, corner)
+    ops = Operations(db, toast, ai, outlook, football, calendar, monday, corner, clover)
     ops.writeups = Writeups(db, ai, directory=directory/'writeups')
     task_worker = ApprovedTasks(corner, vault) if corner else None
     ops.task_worker = task_worker
@@ -242,6 +242,8 @@ def create_app(directory=None, vault=None, background=True):
 
     app = FastAPI(title="the restaurant AI Operations", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
     app.add_middleware(RequestBodyLimit)
+    from .operator_api import operator_router
+    if ops.operator is not None: app.include_router(operator_router(ops.operator))
     app.state.db, app.state.vault, app.state.ops = db, vault, ops
     app.state.ai, app.state.toast, app.state.telegram = ai, toast, telegram
     app.state.started_at = utcnow()
@@ -623,23 +625,23 @@ def create_app(directory=None, vault=None, background=True):
                 ai.record_error(e if isinstance(e,AIError) else AIError('discovery_network_unavailable'))
                 return {'ai':ai.status()}
         if command == 'test-ai':
-            reply = await ops.chat('Use get_report to check live restaurant operations today. Give a concise factual summary and cite the business date and retrieval time.', 'diagnostic')
+            reply = await ops.chat('Use get_report to check live restaurant operations today. Give a concise factual summary and cite the business date and retrieval time.', 'web')
             return {**reply,'status':ai.status()}
         if command == 'test-item-query':
             day = (datetime.now(ET).date() - timedelta(days=1)).isoformat()
-            reply = await ops.chat(f'How many large pizzas did we sell on {day}? Use Toast item-level quantities and give the breakdown.', 'diagnostic')
+            reply = await ops.chat(f'How many large pizzas did we sell on {day}? Use Toast item-level quantities and give the breakdown.', 'web')
             return {**reply, 'last_tool': ai.status().get('last_tool')}
         if command == 'test-weekly-query':
-            reply = await ops.chat('How were sales last week?', 'diagnostic')
+            reply = await ops.chat('How were sales last week?', 'web')
             return {**reply, 'last_tool': ai.status().get('last_tool')}
         if command == 'test-pmix-query':
-            reply = await ops.chat('How many wing and chicken-finger portions and pieces did we sell last week versus the week before? Give the item-size breakdown.', 'diagnostic')
+            reply = await ops.chat('How many wing and chicken-finger portions and pieces did we sell last week versus the week before? Give the item-size breakdown.', 'web')
             return {**reply, 'last_tool': ai.status().get('last_tool')}
         if command == 'test-forecast-query':
-            reply = await ops.chat('Predict our Toast net sales for today. Consider our recent trend and any football games, and give a planning range and limitations.', 'diagnostic')
+            reply = await ops.chat('Predict our Toast net sales for today. Consider our recent trend and any football games, and give a planning range and limitations.', 'web')
             return {**reply, 'last_tool': ai.status().get('last_tool')}
         if command == 'test-build-query':
-            reply = await ops.chat('According to our line build sheet, how many meatballs go in one meatball appetizer? Give the source and note whether this is actual inventory usage.', 'diagnostic')
+            reply = await ops.chat('According to our line build sheet, how many meatballs go in one meatball appetizer? Give the source and note whether this is actual inventory usage.', 'web')
             return {**reply, 'last_tool': ai.status().get('last_tool')}
         if command == 'test-ai-telegram':
             reply = await ops.chat('How is the restaurant doing today? Use the live Toast report and give a short summary.', 'telegram')

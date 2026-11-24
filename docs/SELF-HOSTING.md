@@ -54,6 +54,11 @@ Copy `examples/toast_pizza_mapping.example.json` to ignored
 `data/toast_pizza_mapping.json`; replace placeholder keys with your real Toast
 item/group GUIDs, review classifications and date/version the map. Missing or
 ambiguous mapping withholds exact whole-pizza counts. GUIDs must never enter Git.
+Whole-pizza counts in order search stay unknown (not zero) until this map exists.
+`toast_start_date` (YYYY-MM-DD) marks your first Toast day; earlier dates search Clover.
+Leave it blank when Toast is your only POS. `share_guest_contacts_with_ai` is false by
+default. `python -m scripts.fill_order_history START END` optionally preloads settled
+days with read-only vendor requests; it is resumable and never scheduled.
 `pieces_per_portion` supplies only confirmed exact lower-case menu labels; no
 restaurant's kids-meal count is assumed.
 

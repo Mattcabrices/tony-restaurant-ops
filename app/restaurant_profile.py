@@ -1,11 +1,12 @@
 """Owner configuration only. No restaurant, identity or menu defaults are shared."""
 import json
+from datetime import date
 import re
 from .storage import ROOT
 
 DEFAULT = {'restaurant_name':'Your restaurant','public_location':'','public_hosts':[],
            'pieces_per_portion':{},'company_values':['Service','Quality','Teamwork','Safety'],
-           'research_topics':[]}
+           'research_topics':[],'toast_start_date':'','share_guest_contacts_with_ai':False}
 
 
 def profile():
@@ -28,4 +29,7 @@ def profile():
         rows=value[key]
         if not isinstance(rows,list) or len(rows)>limit or any(not isinstance(s,str) or not s or len(s)>max_chars or any(ord(c)<32 for c in s) for s in rows):
             raise ValueError('Invalid profile list.')
+    if type(value['share_guest_contacts_with_ai']) is not bool:raise ValueError('Use true or false for contact sharing.')
+    if not isinstance(value['toast_start_date'],str):raise ValueError('Use YYYY-MM-DD for the Toast start date.')
+    if value['toast_start_date']:date.fromisoformat(value['toast_start_date'])
     return value

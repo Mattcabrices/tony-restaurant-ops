@@ -10,6 +10,7 @@ apply to `tony_demo/`, not the full operational runtime.
 Never publish data/, Tonys-Corner/, imports, exports, private menu mappings,
 employer forms or backups. Public-source queries must not contain private
 business records. Keep the listener on loopback and use your own credentials.
+Chat history, answer traces and the order cache under data/ contain guest information.
 Native isolation has no unrestricted execution fallback. Never include real
 employee/guest records or credentialed logs in public issues.
 

@@ -106,15 +106,6 @@ def test_human_date_errors_ask_instead_of_searching_guest_name_as_date(text):
     with pytest.raises(ValueError):parse(text,date(2026,10,26))
 
 
-@pytest.mark.asyncio
-async def test_any_orders_human_date_never_reaches_model_mail_or_chat_history(db):
-    db.set('settings',{'demo':False,'web_search_enabled':True})
-    toast=Toast([order(first='Sample')])
-    ops=Operations(db,toast,None,outlook=object())
-    result=await ops.chat('Please find any orders for Sample on October 25, 2026.')
-    assert result['sensitive'] and not result['ai'] and 'Order #' in result['text']
-    assert all(c['businessDate']=='20261025' for c in toast.calls)
-    assert db.history('web')==[] and db.get('web_search_last_usage') is None
 
 
 @pytest.mark.parametrize('text', ['find all orders from Casey tomorrow',
@@ -160,14 +151,6 @@ def test_redundant_ordinal_must_agree_and_not_guess_next_week(phrase):
     with pytest.raises(ValueError):parse('Find orders for Sample Guest '+phrase,date(2026,10,27))
 
 
-@pytest.mark.asyncio
-async def test_existential_order_question_uses_private_route(db):
-    db.set('settings',{'demo':False,'web_search_enabled':True})
-    ops=Operations(db,Toast(),None,outlook=object())
-    result=await ops.chat('Hey Tony, were there any orders for Jane Smith on Friday and what were they?')
-    assert result['sensitive'] and result['ai'] is False
-    assert db.history('web')==[]
-    assert ops.dialogue.get('web')['orders'] is True
 
 
 @pytest.mark.asyncio
@@ -181,10 +164,8 @@ async def test_natural_order_output_is_matching_checks_only_and_private(db):
     second = order('o3','casey2','Casey')
     toast=Toast([casey,casey,second])
     db.set('settings',{'demo':False,'web_search_enabled':True})
-    ops=Operations(db,toast,None,outlook=object())
-    reply=await ops.chat('find all orders from Casey yesterday')
-    text=reply['text']
-    assert reply['sensitive'] and not reply['ai'] and 'Order #42' in text
+    text=render(await GuestLookup(toast).search('find all orders from Casey yesterday'))
+    assert 'Order #42' in text
     assert 'Matching orders shown: 2' in text and 'Large Pizza' in text and '$25.5' in text
     assert 'OTHER GUEST' not in text and 'HIDDEN MODIFIER' not in text
     # A timestamp may contain the area-code digits; test actual contact values
@@ -283,7 +264,7 @@ async def test_cooldown_and_closeout():
 async def test_chat_guest_query_never_calls_model_mail_web_or_persists(db):
     db.set('settings', {'demo':False,'web_search_enabled':True})
     ops = Operations(db,Toast(),None,outlook=object())
-    result = await ops.chat('Find guest by email jane@example.com')
+    result = await ops.chat('/guest email jane@example.com')
     assert result['sensitive'] and result['ai'] is False and 'Jane Smith' in result['text']
     assert db.history('web') == [] and db.get('ai_last_tool') is None
     assert db.get('web_search_last_usage') is None

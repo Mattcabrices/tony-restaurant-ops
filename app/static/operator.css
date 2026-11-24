@@ -1,0 +1,9 @@
+.operator-layout{display:grid;grid-template-columns:minmax(250px,330px) minmax(0,1fr);gap:24px;align-items:start}
+.operator-form label{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;font-size:13px;font-weight:600}
+.operator-form select,.operator-form input{width:100%;padding:11px 12px;border:1px solid #d6ddd2;border-radius:8px;background:#fff;color:#20352c;font:inherit}
+.operator-form .primary{width:100%;margin:8px 0 16px}.operator-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.operator-source{padding:16px 0;border-bottom:1px solid #e2e7de}.operator-source .pill{margin-left:12px}
+.operator-value{display:inline-block;font-size:30px;line-height:1.4;color:#244638;font-variant-numeric:tabular-nums}
+.operator-notes{font-size:13px;color:#596658;padding-left:20px;line-height:1.65}.operator-layout [hidden]{display:none!important}
+#operator-result th,#operator-result td{text-align:left;vertical-align:top}#operator-result td{font-variant-numeric:tabular-nums}
+@media(max-width:950px){.operator-layout{grid-template-columns:1fr}.operator-value{font-size:26px}}

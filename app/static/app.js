@@ -62,7 +62,7 @@ async function route(){
 
  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.dataset.page===page));
 
- const labels={overview:'Overview',shift:'Shift Desk',exceptions:'Exceptions',chat:'Ask your agent',briefings:'Daily briefings',memory:'Memory & tasks',corner:'Tony’s Corner',integrations:'Integrations',settings:'Settings & diagnostics'};
+ const labels={operator:'Operator workspace',overview:'Overview',shift:'Shift Desk',exceptions:'Exceptions',chat:'Ask your agent',briefings:'Daily briefings',memory:'Memory & tasks',corner:'Tony’s Corner',integrations:'Integrations',settings:'Settings & diagnostics'};
 
  $('#page-label').textContent=labels[page]||'Overview';
 
@@ -74,7 +74,7 @@ async function route(){
 
    $('#mode-pill').textContent=config.demo?'DEMO WORKSPACE':'LIVE · READ ONLY';$('#mode-pill').className='pill'+(config.demo?' demo':'');
 
-   const html=await ({overview:overview,shift:shiftPage,exceptions:exceptionsPage,chat:chatPage,briefings:briefings,memory:memory,corner:cornerPage,integrations:integrations,settings:settings}[page]||overview)();
+   const html=await ({operator:()=>window.TonyOperator.page(),overview:overview,shift:shiftPage,exceptions:exceptionsPage,chat:chatPage,briefings:briefings,memory:memory,corner:cornerPage,integrations:integrations,settings:settings}[page]||overview)();
 
    if(version!==routeVersion)return;$('#main').innerHTML=html;bind(page);
 
@@ -228,6 +228,7 @@ async function settings(){const s=await api('status'),a=s.chatgpt;return heading
 function on(id,fn){$(id)?.addEventListener('click',e=>action(e.currentTarget,fn));}
 
 async function bind(page){
+ if(page==='operator')window.TonyOperator.bind();
 
  on('#refresh',route);on('#make-briefing',async()=>{await api('briefings','POST',{});notify('Morning briefing saved.');location.hash='briefings';if(page==='briefings')await route();});
 
@@ -300,7 +301,7 @@ async function bind(page){
 
   on('#calendar-refresh',async()=>{const r=await api('calendar/refresh','POST',{});notify(r.last_error?'Refresh unavailable; saved events remain available.':'Calendar events refreshed.');await route();});
 
-  credentials?.insertAdjacentHTML('afterbegin',`<form class="card" id="clover-form" autocomplete="off"><span class="eyebrow">HISTORICAL SALES</span><h2>Connect Clover</h2><p class="muted">Enter your Clover Platform API token here on this computer. Tony checks Read Orders access before saving it in the Windows-encrypted vault. The token never appears in status or chat.</p><label>Clover merchant ID<input id="clover-merchant" required pattern="[A-Za-z0-9]{8,32}" value="${esc(s.clover?.merchant_id||'3NMZM0YN49QQ1')}" autocomplete="off"></label><label>API token<input id="clover-token" type="password" required autocomplete="off"></label><div class="form-actions"><button class="primary" type="submit">Check and save token</button></div><p class="source-note">${s.clover?.configured?'Token saved for merchant '+esc(s.clover.merchant_id)+'.':'Not connected yet.'} Imported history: ${s.clover?.history?.days||0} days from ${esc(s.clover?.history?.first_day||'pending')} through ${esc(s.clover?.history?.last_day||'pending')}. Tony uses these aggregates for historical questions.</p></form>`);
+  credentials?.insertAdjacentHTML('afterbegin',`<form class="card" id="clover-form" autocomplete="off"><span class="eyebrow">HISTORICAL SALES</span><h2>Connect Clover</h2><p class="muted">Enter your Clover Platform API token here on this computer. Tony checks Read Orders access before saving it in the Windows-encrypted vault. The token never appears in status or chat.</p><label>Clover merchant ID<input id="clover-merchant" required pattern="[A-Za-z0-9]{8,32}" value="${esc(s.clover?.merchant_id||'')}" autocomplete="off"></label><label>API token<input id="clover-token" type="password" required autocomplete="off"></label><div class="form-actions"><button class="primary" type="submit">Check and save token</button></div><p class="source-note">${s.clover?.configured?'Token saved for merchant '+esc(s.clover.merchant_id)+'.':'Not connected yet.'} Imported history: ${s.clover?.history?.days||0} days from ${esc(s.clover?.history?.first_day||'pending')} through ${esc(s.clover?.history?.last_day||'pending')}. Tony uses these aggregates for historical questions.</p></form>`);
 
   $('#clover-form').onsubmit=async e=>{e.preventDefault();await action(e.submitter,async()=>{const token=$('#clover-token').value.trim();try{await api('clover/connect','POST',{merchant_id:$('#clover-merchant').value.trim(),token});notify('Clover token saved. I can now check historical export access.');await route();}finally{const field=$('#clover-token');if(field)field.value='';}});};
 

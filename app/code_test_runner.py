@@ -47,9 +47,13 @@ def main():
                 self.failures.append(report.nodeid[:250])
 
     outcomes = Outcomes()
+    # Explicit isolated configuration prevents pytest walking up to host files.
+    pytest_config = target.parent/'pytest.ini'
+    pytest_config.write_text('[pytest]\nasyncio_mode = auto\n', encoding='utf-8')
     with (target.parent/'pytest.log').open('w', encoding='utf-8') as log:
         sys.stdout = sys.stderr = log
-        status = pytest.main(['-q', '-p', 'pytest_asyncio.plugin', '--tb=short',
+        status = pytest.main(['-q', '-c', str(pytest_config), '--rootdir', str(root),
+            '-p', 'pytest_asyncio.plugin', '--tb=short',
             '--basetemp', config['scratch'], '-o', 'cache_dir='+str(target.parent/'cache'),
             # This positive host-locking test deliberately starts a second
             # process. The code jail forbids children; run it on the host as a

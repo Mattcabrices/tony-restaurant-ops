@@ -4,7 +4,6 @@ import hashlib
 from .code_proposals import CodeProposals
 from .storage import utcnow
 from .briefing_format import telegram_briefing
-from .guest_lookup import is_guest_lookup
 
 import httpx
 
@@ -112,11 +111,9 @@ class Telegram:
             return
         key = 'telegram_reply:' + str(update['update_id'])
         writeups = getattr(self.ops,'writeups',None)
-        guest_followup=getattr(self.ops,'guest_followup_requested',lambda *args:False)(text,'telegram')
-        if writeups and writeups.handles(text,'telegram') and not guest_followup:
+        if writeups and writeups.handles(text,'telegram'):
             if self.db.get(key) is not None:
                 return
-            if getattr(self.ops,'dialogue',None):self.ops.dialogue.clear('telegram')
             # Only a marker is persisted in Telegram metadata. Personnel notes
             # and PDFs use the separate encrypted workspace, never chat history.
             result = await writeups.handle(text,'telegram')
@@ -125,8 +122,7 @@ class Telegram:
             if result.get('writeup_pdf'):
                 await self.send_writeup(result['writeup_pdf'])
             return
-        ai_first=bool(getattr(getattr(self.ops,'conversation_planner',None),'enabled',False))
-        if (is_guest_lookup(text) or guest_followup) and (not ai_first or text.lstrip().startswith('/')):
+        if text.split()[0].casefold() == '/guest':
             # Persist only a delivery marker, never a query or guest reply.
             # Failed/uncertain delivery requires a fresh owner request.
             if self.db.get(key) is not None:
@@ -314,6 +310,11 @@ class Telegram:
                 question = {'/sales': 'How are sales looking today?', '/catchup': 'Anything I missed today?'}.get(text, text)
                 result = await self.ops.chat(question, 'telegram')
                 reply = result['text']
+                if result.get('writeup_pdf') and not result.get('sensitive'):
+                    self.db.set(key, reply)
+                    await self.send(reply, key)
+                    await self.send_writeup(result['writeup_pdf'])
+                    return
                 if result.get('sensitive'):
                     self.db.set(key,{'private_writeup':True} if result.get('writeup_private') else {'sensitive_guest_lookup':True})
                     await self.send(reply,key)

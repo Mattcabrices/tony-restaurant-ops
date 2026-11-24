@@ -4,5 +4,7 @@
   "public_hosts": [],
   "pieces_per_portion": {},
   "company_values": ["Service", "Quality", "Teamwork", "Safety"],
-  "research_topics": []
+  "research_topics": [],
+  "toast_start_date": "",
+  "share_guest_contacts_with_ai": false
 }

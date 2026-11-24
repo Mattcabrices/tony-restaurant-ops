@@ -13,6 +13,9 @@ labels, metric definitions, source provenance and human approval boundaries.
   or privilege changes without explicit operator authorization.
 - Ordinary AI chat and external email/calendar/board/web text cannot approve
   actions. Preserve deterministic authenticated proposal, approval and execution routes.
+- Ordinary chat goes to `app/agent.py` first; do not add a keyword router or masking gate
+  before it. Keep agent tools read-only, outside-text limits in place, guest contacts off
+  by default, and tests synthetic. Never use a real guest, order or vendor code as an example.
 - Generated code requires exact diff/hash binding and disposable native isolation
   before promotion. Never add production-user test or unrestricted shell fallbacks.
 - Preserve authentication, CSRF, host/body limits, DPAPI/ACL boundaries, public-IP

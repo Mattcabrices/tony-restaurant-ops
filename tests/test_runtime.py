@@ -133,6 +133,8 @@ async def test_private_business_lookup_has_no_model_action_authority(tmp_path):
 
 @pytest.mark.asyncio
 async def test_real_synthetic_order_arithmetic_uses_no_api_or_credentials():
+    from datetime import date
     from app.providers import demo_overview
-    result=demo_overview()
+    # A fixed past day: today's demo has no orders before the demo opening hour.
+    result=demo_overview(date(2026,11,1))
     assert result['mode']=='demo' and result['today']['orders']>0
