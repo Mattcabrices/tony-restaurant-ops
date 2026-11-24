@@ -93,5 +93,5 @@ async def test_ai_can_route_unmodified_natural_request_to_time_channel_tool(db):
         async def get(self, path, params=None, ttl=0):
             return [order('one', '17:00', 20)] if path == '/orders/v2/ordersBulk' else OPTIONS[TAKE]
     ops = Operations(db, Toast(), Model())
-    result = await ops._business_chat('What was total sales in takeout, dine-in and online ordering takeout on Wednesday from 4 to 9?', 'telegram')
+    result = await ops.chat('What was total sales in takeout, dine-in and online ordering takeout on Wednesday from 4 to 9?', 'telegram')
     assert result['ai'] and '4–9 PM' in result['text']

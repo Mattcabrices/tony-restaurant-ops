@@ -6,6 +6,7 @@ import json
 import secrets
 import time
 import uuid
+from datetime import datetime, timedelta, timezone
 from .storage import utcnow
 from urllib.parse import urlencode
 
@@ -25,8 +26,6 @@ class AIError(Exception):
 
 
 class ChatGPT:
-    supports_intent_routing = True
-    supports_conversation_planning = True
 
     def __init__(self, vault, db, http=None):
         self.vault, self.db = vault, db
@@ -218,6 +217,23 @@ class ChatGPT:
             self.db.set('ai_paused', True)
             self.db.set('ai_pause_reason', {'code': error.code, 'status': error.status,
                                              'request_id': error.request_id, 'at': utcnow()})
+
+    def limit_retry_due(self, minutes=30):
+        """A usage limit resets upstream; an owner question may probe it once per window."""
+        reason = self.db.get('ai_pause_reason') or {}
+        if reason.get('code') != 'subscription_sharing_usage_limit_exceeded':
+            return False
+        try:
+            age = datetime.now(timezone.utc) - datetime.fromisoformat(reason['at'])
+        except (KeyError, ValueError, TypeError):
+            return False
+        return age >= timedelta(minutes=minutes)
+
+    def allow_limit_probe(self):
+        if self.db.get('ai_paused') and self.limit_retry_due():
+            # Stamp first, so a still-exhausted plan costs one attempt per window.
+            self.db.set('ai_pause_reason', {**self.db.get('ai_pause_reason'), 'at': utcnow()})
+            self.db.set('ai_paused', False)
 
     async def response(self, inputs, tools, tool_choice=None, *, local_output_chars=None):
         async with self.inference_lock:

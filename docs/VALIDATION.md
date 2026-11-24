@@ -1,5 +1,13 @@
 # Validation record
 
+## AI-first answering — November 24, 2026
+
+- 217 public tests passed in the native Windows AppContainer with synthetic records,
+  with the denial probes passing. Scripted model replies test orchestration, not live
+  model accuracy. No vendor account, real guest record or credential was used.
+- The public-tree guard and JavaScript syntax checks passed. A fresh Windows VM install
+  remains untested. Hosted CI applies only to the commits it ran on.
+
 ## Open-source operational alpha — November 2, 2026
 
 - 165 public tests passed locally on Windows/Python 3.14.7, using synthetic state.

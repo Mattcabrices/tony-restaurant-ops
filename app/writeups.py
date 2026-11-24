@@ -206,16 +206,8 @@ class Writeups:
 
     def handles(self,text,channel):
         if channel not in ('web','telegram'):return False
-        if re.match(r'^/writeup(?:\s|$)',text.strip(),re.I):return True
-        if text.strip().startswith('/'):return False
-        from .guest_lookup import is_guest_lookup
-        if is_guest_lookup(text):return False
-        # Natural language needs interpretation, especially during an active
-        # draft. It must not be captured as another incident note by default.
-        if getattr(self.ai,'supports_intent_routing',False):return False
-        if natural_writeup(text):return True
-        state=self.load(channel)
-        return bool(state and state.get('active'))
+        # Ordinary language reaches this workflow only through the AI.
+        return bool(re.match(r'^/writeup(?:\s|$)',text.strip(),re.I))
 
     def routing_context(self,channel):
         state=self.load(channel)

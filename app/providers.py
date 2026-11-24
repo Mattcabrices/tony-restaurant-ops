@@ -104,6 +104,9 @@ class Toast:
                     if r.status_code != 200:
                         raise ProviderError(f'Toast endpoint unavailable (HTTP {r.status_code}); check granted permissions.')
                     data = r.json()
+                    if len(self.cache) > 60:  # Raw pages are large; keep only recent ones.
+                        for old in sorted(self.cache, key=lambda k: self.cache[k][0])[:-40]:
+                            del self.cache[old]
                     self.cache[key] = (time.time(), data)
                     self.health[path] = {'status': 'Connected', 'checked_at': utcnow()}
                     return data
@@ -330,7 +333,7 @@ class Toast:
                 'target_period_start': bounds(target, closeout)[0].isoformat(),
                 'target_period_end': bounds(target, closeout)[1].isoformat(),
                 'forecast': forecast, 'games': target_game, 'current_sales': current,
-                'manager_context': 'the restaurant is a Bills bar; management says UGA and other strong college football games materially affect demand. No fixed uplift percentage has been supplied or validated.'}
+                'manager_context': 'Local sports interest comes only from owner-confirmed notes. No fixed uplift percentage has been supplied or validated.'}
 
     async def optional(self, name, path, params=None, ttl=120):
         try:

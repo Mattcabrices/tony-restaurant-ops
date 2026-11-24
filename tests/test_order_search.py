@@ -74,20 +74,8 @@ async def test_unknown_amounts_page_limits_and_result_caps_are_explicit(monkeypa
 
 
 @pytest.mark.asyncio
-async def test_natural_amount_request_runs_read_tool_then_ai_summary(db):
+async def test_amount_read_is_dispatched_with_live_totals(db):
     db.set('settings', {'demo': False})
-    class Model:
-        def __init__(self): self.calls = 0
-        def status(self): return {'connected': True}
-        async def response(self, inputs, tools):
-            self.calls += 1
-            if self.calls == 1:
-                assert any(t['name'] == 'get_orders_by_amount' for t in tools)
-                return {'output': [{'type': 'function_call', 'name': 'get_orders_by_amount', 'call_id': 'amounts',
-                    'arguments': json.dumps({'start': '2026-11-03', 'end': '2026-11-03', 'minimum': 500, 'maximum': 900, 'basis': 'order_total'})}]}
-            r = next(json.loads(x['output']) for x in inputs if x.get('call_id') == 'amounts' and x.get('type') == 'function_call_output')
-            assert r['matches'][0]['combined_order_total'] == 600
-            return {'output': [{'type': 'message', 'content': [{'type': 'output_text', 'text': 'Found one order totaling $600.'}]}]}
-    ops = Operations(db, Toast([order('one', [600])]), Model())
-    r = await ops._business_chat('Find orders between $500 and $900 yesterday', 'telegram')
-    assert r['ai'] and '$600' in r['text']
+    ops = Operations(db, Toast([order('one', [600])]), None)
+    r = await ops.tool('get_orders_by_amount', {'start': '2026-11-03', 'end': '2026-11-03', 'minimum': 500, 'maximum': 900, 'basis': 'order_total'}, 'web')
+    assert r['matches'][0]['combined_order_total'] == 600

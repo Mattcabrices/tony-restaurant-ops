@@ -190,11 +190,3 @@ async def test_rollback_switch_preserves_legacy_tools_and_avoids_new_schema(db,m
     assert await ops.tool('get_memory',{},'web')==[]
 
 
-def test_followups_retain_amount_filters_but_not_failed_query_claims():
-    from app.dialogue import Dialogue
-    d=Dialogue()
-    d.remember_business('web','get_orders_by_amount',{'minimum':500,'maximum':900.25,'basis':'order_total'},{'partial':False})
-    assert d.business_hint('What about last week?','web')['arguments']['maximum']==900.25
-    d.clear('web')
-    d.remember_business('web','get_operator_sales',{'metric':'sales'},{'status':'unavailable'})
-    assert d.business_hint('What about last week?','web') is None

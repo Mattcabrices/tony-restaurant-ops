@@ -9,7 +9,7 @@ separate backup, migration, restart and verification step.
 
 ```mermaid
 flowchart LR
-  Telegram --> Chat[AI conversation planner]
+  Telegram --> Chat[AI tool loop]
   WebChat[Web chat] --> Chat
   Chat --> Tools[Validated read tools]
   Workspace[Operator workspace] --> API[Authenticated typed HTTP API]
@@ -67,8 +67,9 @@ OPERATOR-SCHEMA.sql            Additive operations schema
 Existing operations tables remain owned by `app/storage.py` and their domain
 modules. They include `meta`, `sessions`, `memory`, `messages`, `briefings`,
 `snapshots`, Clover import aggregates, the exception ledger and booking references.
-No customer/order payload table is added by this release. Private transcripts
-remain bounded DPAPI archives, outside ordinary AI prompt context.
+No customer/order payload table is added by this release. Since the
+November 24 AI-first release, chat is stored readable in `messages` and recent chat is AI
+context; `agent_traces` and the separate ignored order cache hold guest information.
 
 Research remains in `Tonys-Corner/research.sqlite3`, separately migrated by
 `app/corner/store.py`: datasets, observations, provenance, journals, hypotheses,

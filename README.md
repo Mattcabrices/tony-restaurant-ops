@@ -40,8 +40,8 @@ email administration or paid vendor services. See [installation and configuratio
 
 | Component | Included implementation | What the installer must provide |
 |---|---|---|
-| Toast | Read-only sales, checks, items, modifiers, recorded labor, guest/tab lookup and future bookings | Approved API credentials and scopes; own menu identity mappings; actual source coverage |
-| Clover | Read-only client and historical aggregate importer | Merchant credentials and permitted historical access/imports |
+| Toast | Read-only sales, checks, items, modifiers, recorded labor, cross-date guest/order search and future bookings | Approved API credentials and scopes; own menu identity mappings; actual source coverage |
+| Clover | Read-only client, historical order search and aggregate importer | Merchant credentials and permitted historical access/imports |
 | Telegram | Allowlisted private chat, commands, optional briefing delivery, guest/coaching flows and approval routes | Own bot token, private user/chat IDs, explicit delivery choices |
 | Outlook | Delegated Graph `Mail.Read` sign-in and bounded Inbox previews | Own Microsoft Entra public-client registration and tenant consent; no sending or drafting implemented |
 | monday.com | Bounded read adapter and manual Excel import/weekly refresh workflow | Own board/token or exports; no board writes |
@@ -55,6 +55,28 @@ email administration or paid vendor services. See [installation and configuratio
 A connector implementation is not proof that an account is connected or that
 all vendor endpoints are available. Missing data is never zero. Toast net sales
 and Clover gross line sales stay separate; labor coverage must be reconciled.
+
+## How questions are answered
+
+Ordinary chat goes straight to one AI tool loop in `app/agent.py`. There is no keyword
+router, command vocabulary or name masking in front of it: the AI reads the actual
+question with recent messages, chooses read-only tools, checks the results and answers.
+`find_orders` (`app/order_lookup.py`) searches Toast and Clover by person, nickname,
+misspelling, tab, phone, email, item, amount or order number, counts mapped whole
+pizzas, and offers clearly separated nearby dates when a date has no match.
+
+**Know what leaves the computer.** Guest names, tab names and order contents are sent
+to your connected AI provider when needed to answer. Guest phone numbers and emails
+are withheld unless you set `share_guest_contacts_with_ai`. Card data, credentials and
+street addresses are never included. Staff names can appear in labor answers. Chat,
+including coaching chat, is stored readable in the local ignored database and recent
+messages are AI context. Settled order days are cached locally under ignored `data/`.
+
+After email, board, shift-desk, catch-up or fetched-page text, an answer gets no more
+tools. After web, calendar or research text it loses web search and form drafting.
+Web queries cannot repeat known guest details or runs of words from owner notes.
+Questions, tool calls and errors are kept locally for debugging:
+`python -m scripts.open_chat_history --traces 20`.
 
 ## Restaurant-specific configuration
 

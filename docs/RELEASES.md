@@ -1,5 +1,16 @@
 # Release notes
 
+## November 24, 2026 — AI-first answering
+
+- Ordinary chat now uses one AI tool loop; the keyword router, masked planner, dialogue
+  metadata and guest-reply modules are removed. `/guest` and `/writeup` remain local.
+- Cross-POS order search with similar names, tabs, contacts, items, amounts, rankings,
+  explicit gaps and a local settled-day cache bound to the pizza-mapping version.
+- Usage limits are reported as limits and retried by an owner question at most every
+  30 minutes; facts already retrieved survive an AI failure.
+- Guest contacts stay out of AI context by default. Outside-text tool limits are kept.
+- Local answer traces, chat readable in the local database, and recent chat as context.
+
 ## November 4, 2026 — staged operator workspace
 
 Added typed sales, receipt, amount-search, channel and forecast requests shared
